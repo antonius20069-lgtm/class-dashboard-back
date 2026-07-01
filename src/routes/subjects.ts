@@ -13,10 +13,10 @@ const {search, department ,page=1 ,limit = 10 } = req.query;
         const LimitPerPage = Math.min(Math.max(1,parseInt(String(limit),10) ||1),100);
         const offset = (currentPage - 1) * +limit;
 
-const filterCoditions = []
+const filterConditions = []
 
     if(search) {
-        filterCoditions.push(
+        filterConditions.push(
             or(
                 ilike(subjects.name, `%${search}%`),
             ilike(subjects.code, `%${search}%`)
@@ -26,11 +26,10 @@ const filterCoditions = []
     }
 
         if(department) {
-         const deptPattern =`%${String(departments.name).replace(/[%_]/g,'\\$')}%`;
-            filterCoditions.push(ilike(departments.name,departments))
-
+            const deptPattern = `%${String(department).replace(/[%_]/g, '\\$&')}%`;
+            filterConditions.push(ilike(departments.name, deptPattern));
         }
-        const whereClause = filterCoditions.length > 0 ? and(... filterCoditions) : undefined;
+        const whereClause = filterConditions.length > 0 ? and(... filterConditions) : undefined;
 
         const countResults = await db
             .select({count : sql<number>`count(*)`}).from(subjects)
