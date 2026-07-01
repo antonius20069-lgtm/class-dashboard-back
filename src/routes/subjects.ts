@@ -26,12 +26,8 @@ const filterCoditions = []
     }
 
         if(department) {
-            filterCoditions.push(
-                or(
-                    ilike(departments.name, `%${search}%`),
-
-                )
-            )
+         const deptPattern =`%${String(departments.name).replace(/[%_]/g,'\\$')}%`;
+            filterCoditions.push(ilike(departments.name,departments))
 
         }
         const whereClause = filterCoditions.length > 0 ? and(... filterCoditions) : undefined;
