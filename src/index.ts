@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 3000;
 
 // برمجيات وسيطة لقراءة البيانات (Middleware)
 app.use(express.json());
+
+if (!process.env.FRONTEND_URL) throw new Error('No url provided');
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
