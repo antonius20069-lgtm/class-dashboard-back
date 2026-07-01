@@ -9,10 +9,6 @@ export const timestamps = {
         .notNull(),
 };
 
-
-
-
-
 export const departments = pgTable('departments', {
     id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
     code:varchar('code',{length:50}).notNull().unique(),
