@@ -33,13 +33,18 @@ const filterConditions = []
 
         const countResults = await db
             .select({count : sql<number>`count(*)`}).from(subjects)
-            .leftJoin(departments,eq(subjects.departmentID,departments.id))
+            .leftJoin(departments,eq(subjects.departmentId,departments.id))
             .where(whereClause)
 
         const  totalCount = countResults[0]?.count??0
-        const subjectsList = await db.select({... getTableColumns(subjects),
-         department :{... getTableColumns(departments)},}).from(subjects).leftJoin(departments,eq(subjects.departmentID,departments.id))
-            .orderBy(desc(subjects.createdAt)).limit(LimitPerPage).offset(offset)
+        const subjectsList = await db.select({...getTableColumns(subjects),
+            department: {...getTableColumns(departments)},})
+            .from(subjects)
+            .leftJoin(departments, eq(subjects.departmentId, departments.id))
+            .where(whereClause)
+            .orderBy(desc(subjects.createdAt))
+            .limit(LimitPerPage)
+            .offset(offset)
 
         res.status(200).json({
 data:subjectsList,
@@ -51,7 +56,7 @@ pagination:{
 }
         })
 
-
+    //
     }catch (error) {
         console.error('GIT/subjects', error);
       res.status(500).json({error: 'Server Error'});
