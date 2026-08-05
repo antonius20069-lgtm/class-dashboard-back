@@ -42,5 +42,6 @@
     "skipLibCheck": true,
     "rootDir": "./src",
     "outDir": "./dist"
-  }
+  },
+  "exclude": ["node_modules", "drizzle.config.ts", "dist"]
 }
